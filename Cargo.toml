@@ -1,0 +1,19 @@
+[package]
+name = "algorithm-efficiency"
+version = "1.0.0"
+authors = ["Veniamin Ilmer"]
+edition = "2018"
+license = "Apache-2.0"
+description = "Comparing Algorithms speeds"
+readme = "Readme.md"
+repository = "https://github.com/veniamin-ilmer/crate-race"
+
+[dependencies]
+#Used internally for benchmarking..
+bencher = "0.1.5"
+rand = "0.6.5"
+
+[[bench]]
+name = "sort"
+path = "benches/sort/bench.rs"
+harness = false
