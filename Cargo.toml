@@ -1,5 +1,5 @@
 [package]
-name = "algorithm-efficiency"
+name = "algorithms"
 version = "1.0.0"
 authors = ["Veniamin Ilmer"]
 edition = "2018"
@@ -10,7 +10,7 @@ repository = "https://github.com/veniamin-ilmer/crate-race"
 
 [dependencies]
 #Used internally for benchmarking..
-bencher = "0.1.5"
+criterion = "0.2.11"
 rand = "0.6.5"
 
 [[bench]]
