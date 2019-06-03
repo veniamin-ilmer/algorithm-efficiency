@@ -12,8 +12,8 @@ criterion_group!(random, random_benchmark);
 criterion_main!(random);
 
 fn random_benchmark(c: &mut Criterion) {
-  let plot_config = PlotConfiguration::default()
-      .summary_scale(AxisScale::Logarithmic);
+  let plot_config = PlotConfiguration::default();
+//      .summary_scale(AxisScale::Logarithmic);
 
   let mut sort_function: fn(&mut [u32]) = bubble::sort;
 
@@ -38,10 +38,9 @@ fn random_benchmark(c: &mut Criterion) {
     "Sort",
     ParameterizedBenchmark::new(
       "Bubble", move |b: &mut Bencher, size: &u32| { sort_function = bubble::sort; benchmark_sort(b, size) },
-      vec![1u32, 10, 100, 1_000],
+      (1u32..11).collect::<Vec<u32>>(),
     )
     .with_function("Selection", move |b: &mut Bencher, size: &u32| { sort_function = selection::sort; benchmark_sort(b, size) })
-    .with_function("Insertion", move |b: &mut Bencher, size: &u32| { sort_function = selection::sort; benchmark_sort(b, size) })
     .plot_config(plot_config),
   );
 }
