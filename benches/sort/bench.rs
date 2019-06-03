@@ -6,6 +6,7 @@ use rand::seq::SliceRandom;
 
 mod bubble;
 mod selection;
+mod insertion;
 
 criterion_group!(random, random_benchmark);
 
@@ -38,9 +39,10 @@ fn random_benchmark(c: &mut Criterion) {
     "Sort",
     ParameterizedBenchmark::new(
       "Bubble", move |b: &mut Bencher, size: &u32| { sort_function = bubble::sort; benchmark_sort(b, size) },
-      (1u32..11).collect::<Vec<u32>>(),
+      (0u32..10).collect::<Vec<u32>>(),
     )
     .with_function("Selection", move |b: &mut Bencher, size: &u32| { sort_function = selection::sort; benchmark_sort(b, size) })
+    .with_function("Insertion", move |b: &mut Bencher, size: &u32| { sort_function = insertion::sort; benchmark_sort(b, size) })
     .plot_config(plot_config),
   );
 }
