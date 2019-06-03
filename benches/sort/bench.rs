@@ -1,4 +1,3 @@
-use criterion::Criterion;
 use criterion::*;
 
 use rand::thread_rng;
@@ -7,6 +6,7 @@ use rand::seq::SliceRandom;
 mod bubble;
 mod selection;
 mod insertion;
+mod cycle;
 
 criterion_group!(random, random_benchmark);
 
@@ -18,13 +18,14 @@ fn random_benchmark(c: &mut Criterion) {
 
   let mut sort_function: fn(&mut [u32]) = bubble::sort;
 
-  let benchmark_sort = move |b: &mut Bencher, size: &u32| {
+  let benchmark_sort = move |b: &mut Bencher, size: &usize| {
     let vec_list = make_list_of_random_nums(*size);
-    let mut count = 0;
-    b.iter_batched(
+    let mut count = 0_usize;
+    b.iter_batched_ref(
       || {
-        let random_vec = vec_list[count].clone();
-        count = (count + 1) % 100;
+        let mut random_vec = vec![0; *size];
+        random_vec.clone_from_slice(&vec_list[count..size+count]);
+        count = (count + 1) % 10000;
         random_vec
       },
       |random_vec| {
@@ -38,21 +39,18 @@ fn random_benchmark(c: &mut Criterion) {
   c.bench(
     "Sort",
     ParameterizedBenchmark::new(
-      "Bubble", move |b: &mut Bencher, size: &u32| { sort_function = bubble::sort; benchmark_sort(b, size) },
-      (0u32..10).collect::<Vec<u32>>(),
+      "Bubble", move |b: &mut Bencher, size: &usize| { sort_function = bubble::sort; benchmark_sort(b, size) },
+      (0usize..10).collect::<Vec<usize>>(),
     )
-    .with_function("Selection", move |b: &mut Bencher, size: &u32| { sort_function = selection::sort; benchmark_sort(b, size) })
-    .with_function("Insertion", move |b: &mut Bencher, size: &u32| { sort_function = insertion::sort; benchmark_sort(b, size) })
+    .with_function("Selection", move |b: &mut Bencher, size: &usize| { sort_function = selection::sort; benchmark_sort(b, size) })
+    .with_function("Insertion", move |b: &mut Bencher, size: &usize| { sort_function = insertion::sort; benchmark_sort(b, size) })
+    .with_function("Cycle", move |b: &mut Bencher, size: &usize| { sort_function = cycle::sort; benchmark_sort(b, size) })
     .plot_config(plot_config),
   );
 }
 
-fn make_list_of_random_nums(size: u32) -> Vec<Vec<u32>> {
-  let mut random_vec: Vec<u32> = (0..size).collect();
-  let mut vec_list = vec![];
-  for _count in 0..100 {
-    random_vec.shuffle(&mut thread_rng());
-    vec_list.push(random_vec.clone());
-  }
-  vec_list
+fn make_list_of_random_nums(size: usize) -> Vec<u32> {
+  let mut random_vec: Vec<u32> = (0..10000+size as u32).collect();
+  random_vec.shuffle(&mut thread_rng());
+  random_vec
 }

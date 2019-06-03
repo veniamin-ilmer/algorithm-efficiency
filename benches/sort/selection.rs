@@ -1,15 +1,21 @@
-pub fn sort(in_vec: &mut [u32]) {
-	for i in 0 .. in_vec.len() - 1 {
+pub fn sort(arr: &mut [u32]) {
+  //Could do arr.len() - 1 because single element is also min element.
+	for i in 0 .. arr.len() - 1 {
+    //Assume the first element is the smallest.
     let mut smallest = i;
-    for j in i + 1 .. in_vec.len() {
-      if in_vec[j] < in_vec[smallest] {
-        smallest = i; //Found new minimum. Remember its index.
+    //Test against elements after i to find the smallest.
+    for j in i + 1 .. arr.len() {
+      //If this element is less, then it is the new minimum.
+      if arr[j] < arr[smallest] {
+        //Found new minimum. Remember its index.
+        smallest = j;
       }
     }
 	
-    //Found something smaller than our previous minimum.
+    //If this element is less, then it is the new minimum.
     if smallest != i {
-      in_vec.swap(i, smallest);
+      //Found new minimum; remember its index.
+      arr.swap(i, smallest);
     }
   }
 }

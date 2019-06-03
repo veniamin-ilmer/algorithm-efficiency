@@ -17,3 +17,8 @@ rand = "0.6.5"
 name = "sort"
 path = "benches/sort/bench.rs"
 harness = false
+
+[[bench]]
+name = "test"
+path = "benches/test/test.rs"
+harness = false
