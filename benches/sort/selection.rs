@@ -1,4 +1,7 @@
 pub fn sort(arr: &mut [u32]) {
+  if arr.len() <= 1 {
+    return;
+  }
   //Could do arr.len() - 1 because single element is also min element.
 	for i in 0 .. arr.len() - 1 {
     //Assume the first element is the smallest.

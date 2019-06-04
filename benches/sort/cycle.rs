@@ -2,6 +2,9 @@ use std::mem;
 
 //Sort an array in place and return the number of writes.
 pub fn sort(arr: &mut [u32]) {
+  if arr.len() <= 1 {
+    return;
+  }
 	//Loop through the array to find cycles to rotate.
 	for cycle_start in 0 .. arr.len() - 1 {
 		let mut item = arr[cycle_start];
